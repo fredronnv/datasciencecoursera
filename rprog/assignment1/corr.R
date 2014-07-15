@@ -10,5 +10,14 @@ corr <- function(directory, threshold = 0) {
   ## Return a numeric vector of correlations
   files <- list.files(path = directory, full.names = TRUE)
   data <- do.call("rbind", lapply(files,read.csv, header = TRUE))
+  observations <- complete(directory)
+  filtered_observations <- subset(observations, nobs > threshold)
+  r_vec <- numeric()
+  for ( i in filtered_observations[["id"]] ){
+    sulfate <- subset(data, ID == i & !is.na(sulfate) & !is.na(nitrate))[["sulfate"]]
+    nitrate <- subset(data, ID == i & !is.na(sulfate) & !is.na(nitrate))[["nitrate"]]
+    r_vec <- c(r_vec, cor(sulfate,nitrate))
+  }
   
+  return(r_vec)
 }
