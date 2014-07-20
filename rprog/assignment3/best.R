@@ -12,10 +12,10 @@ best <- function(state, outcome) {
   ## rate
   
   # Get data
-  outcome <- read.csv("outcome-of-care-measures.csv", colClasses = "character")
-  
+  outcome_data <- read.csv("outcome-of-care-measures.csv", colClasses = "character")
+
   # First filter for state
-  outcome_state <- subset(outcome, State == state)
+  outcome_state <- subset(outcome_data, State == state)
   
   if ( nrow(outcome_state) <= 0 ){
     stop("invalid state")
@@ -23,5 +23,13 @@ best <- function(state, outcome) {
   
   # Then look at what we're trying to find
   string <- "Hospital.30.Day.Death..Mortality..Rates.from."
-  look_for <- paste(string, simpleCap(outcome))
+  look_for <- paste(string, simpleCap(outcome), sep="")
+  
+  if ( !look_for %in% colnames(outcome_data) ){
+    stop("invalid outcome")
+  }
+  outcome_state[[look_for]] <- as.numeric(outcome_state[[look_for]]) 
+  hosp <- subset( outcome_state, !is.na(get(look_for)))
+  hosp <- subset( hosp, get(look_for) == min(hosp[[look_for]]) )
+  return(hosp[["Hospital.Name"]])
 }
