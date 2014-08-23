@@ -4,12 +4,10 @@ library("plyr")
 NEI <- readRDS("summarySCC_PM25.rds")
 SCC <- readRDS("Source_Classification_Code.rds")
 
-PM25 = subset(NEI, fips=='24510')
+BALT = subset(NEI, fips=='24510')
 
-t <- ddply(PM25, .(type, year), summarize, sum = sum(Emissions))
-print(t)
-#png(width=480, height=480);
+table <- ddply(BALT, .(type, year), summarize, sum = sum(Emissions))
 
-#qplot(total, year, data = t) + facet_grid(. ~ type)
+png(filename = "plot3.png", width=480, height=480);
 
-
+qplot(year, sum, data = table, type ='l') + facet_grid(type ~ .) + geom_line()
