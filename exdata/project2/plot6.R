@@ -16,4 +16,4 @@ table <- ddply(MOTORMULTI, .(year,fips), summarize, sum = sum(Emissions))
 table$fips <- factor(table$fips,labels=c('Los Angeles County','Baltimore City'))
 
 png(filename = "plot6.png", width=480, height=480);
-qplot(year, sum, data=table) + facet_grid(.~fips) + geom_line() + ylab("Total Emissions") + xlab("Year") + ggtitle("PM25 Emissions from Motor Vehicle Sources")
+qplot(year, sum, data=table) + facet_grid(.~fips) + geom_point() + geom_smooth(method=lm) + ylab("Total Emissions") + xlab("Year") + ggtitle("PM25 Emissions from Motor Vehicle Sources")

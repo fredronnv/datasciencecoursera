@@ -14,5 +14,5 @@ table <- ddply(MOTORBALT, .(year), summarize, sum = sum(Emissions))
 
 png(filename = "plot5.png", width=480, height=480);
 
-qplot(year, sum, data=table) + geom_line() + ylab("Total Emissions") + xlab("Year") + ggtitle("PM25 Emissions from Motor Vehicle Sources")
+qplot(year, sum, data=table) + geom_point() + geom_smooth(method=lm) + ylab("Total Emissions") + xlab("Year") + ggtitle("PM25 Emissions from Motor Vehicle Sources")
 
